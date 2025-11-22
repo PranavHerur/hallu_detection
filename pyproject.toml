@@ -1,0 +1,9 @@
+[project]
+name = "hallu"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "zensols-calamr==0.3.0",
+]
