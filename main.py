@@ -9,16 +9,20 @@ logging.getLogger("zensols.amr").setLevel(logging.DEBUG)
 # logging.getLogger("zensols").setLevel(logging.DEBUG)
 
 
-def main(align: bool = False, export_pyg: bool = False):
-    if 1:
-        print("clearing cache")
-        import shutil
-        from pathlib import Path
+def _delete_cache():
+    print("clearing cache")
+    import shutil
+    from pathlib import Path
 
-        ddir = Path("~/.cache/calamr/data").expanduser()
-        if ddir.is_dir():
-            shutil.rmtree(ddir)
-        print("cleared cache")
+    ddir = Path("~/.cache/calamr/data").expanduser()
+    if ddir.is_dir():
+        shutil.rmtree(ddir)
+    print("cleared cache")
+
+
+def main(align: bool = False, export_pyg: bool = False, delete_cache: bool = False):
+    if delete_cache:
+        _delete_cache()
 
     print("importing")
     from zensols.calamr.cli import ApplicationFactory
@@ -43,6 +47,13 @@ def main(align: bool = False, export_pyg: bool = False):
         "comment": "original 2014 Liu et al example",
         "body": "I saw Joe's dog, which was running in the garden. The dog was chasing a cat.",
         "summary": "Joe's dog was chasing a cat in the garden.",
+    }
+
+    doc = {
+        "id": "test-431-truth",
+        "comment": "test-431-truth",
+        "body": "Abso Lutely Productions is an American film and television production company owned by actors Tim Heidecker and Eric Wareheim and producer Dave Kneebone. It is known for producing TV shows such as Tom Goes to the Mayor;  Nathan for You; The Eric Andre Show;  Tim and Eric Awesome Show, Great Job!;  and Check It Out! with Dr. Steve Brule.\nTim Heidecker's father has been featured in the company's vanity logo since 2006. Sourced from a home video with a June 28, 1991 time stamp, he says, \"Abso-lutely,\" providing inspiration for the company name. This was in response to Tim (then 15 years old) asking him to sum up his vacation in two words.",
+        "summary": "Tom Goes to the Mayor.",
     }
 
     print("parsing documents")
@@ -117,6 +128,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--align", action="store_true")
+    parser.add_argument("--delete-cache", action="store_true")
     args = parser.parse_args()
 
-    main(args.align)
+    main(args.align, args.delete_cache)
